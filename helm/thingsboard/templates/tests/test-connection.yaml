@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "thingsboard.fullname" . }}-test-connection"
+  labels:
+    {{- include "thingsboard.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "thingsboard.fullname" . }}:{{ .Values.node.service.port }}']
+  restartPolicy: Never

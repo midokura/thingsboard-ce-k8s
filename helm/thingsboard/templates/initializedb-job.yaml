@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: '{{ .Release.Name }}-init-tb-db'
+  labels:
+    {{- include "thingsboard.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 600
+  template:
+    spec:
+      imagePullSecrets:
+        - name: '{{ .Release.Name }}-container-registry'
+      containers:
+      - name: init-db
+        envFrom:
+        - configMapRef:
+            name: '{{ .Release.Name }}-node-db-config'
+        volumeMounts:
+          - mountPath: /config
+            name: '{{ .Release.Name }}-node-config'
+        image: "{{ .Values.node.image.server | default .Values.global.image.server }}/{{ .Values.node.image.repository }}:{{ .Values.node.image.tag | default .Values.global.image.tag }}"
+        command:
+          - "/bin/bash"
+        args:
+          - "-c"
+          - "start-tb-node.sh"
+        env:
+        - name: INSTALL_TB
+          value: "true"
+        - name: LOAD_DEMO
+          value: "{{ .Values.node.loadDemo }}"
+      restartPolicy: Never
+      volumes:
+        - name: '{{ .Release.Name }}-node-config'
+          configMap:
+            name: '{{ .Release.Name }}-node-config'
+            items:
+            - key: conf
+              path: thingsboard.conf
+            - key: logback
+              path: logback.xml
