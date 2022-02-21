@@ -1,15 +1,16 @@
-{{- if .Values.cassandra.enabled -}}
+{{- if .Values.cassandra.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.cassandra.initDBConfigMap }}
+  name: '{{ .Release.Name }}-cassandra-init-db'
   labels:
+    name: '{{ .Release.Name }}-cassandra-init-db'
     {{- include "thingsboard.labels" . | nindent 4 }}
-  data:
-    "01-init.cql": |
-       CREATE KEYSPACE IF NOT EXISTS {{ .Values.cassandraInitDB.keyspace }}
-         WITH replication = {
-           'class' : '{{ .Values.cassandraInitDB.replication.class }}',
-           'replication_factor' : {{ .Values.cassandraInitDB.replication.factor }}
-         };
+data:
+  "01-init.cql": |
+     CREATE KEYSPACE IF NOT EXISTS {{ .Values.cassandraInitDB.keyspace }}
+       WITH replication = {
+         'class' : '{{ .Values.cassandraInitDB.replication.class }}',
+         'replication_factor' : {{ .Values.cassandraInitDB.replication.factor }}
+       };
 {{- end }}

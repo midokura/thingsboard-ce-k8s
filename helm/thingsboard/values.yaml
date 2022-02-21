@@ -96,6 +96,102 @@ node:
   
   affinity: {}
 
+mqttTransport:
+  jsonLogs: false
+  image:
+    repository: thingsboard/tb-mqtt-transport
+    # Overrides the global image values
+    #server: docker.io
+    #pullPolicy: Always
+    #tag: "X.Y.Z"
+  replicaCount: 1
+  port: 8081
+  timeout: 10000
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    port: 8883
+  resources: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+httpTransport:
+  jsonLogs: false
+  image:
+    repository: thingsboard/tb-http-transport
+    # Overrides the global image values
+    #server: docker.io
+    #pullPolicy: Always
+    #tag: "X.Y.Z"
+  replicaCount: 1
+  port: 8082
+  timeout: 10000
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    port: 8082
+  resources: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+coapTransport:
+  jsonLogs: false
+  image:
+    repository: thingsboard/tb-coap-transport
+    # Overrides the global image values
+    #server: docker.io
+    #pullPolicy: Always
+    #tag: "X.Y.Z"
+  replicaCount: 1
+  port: 8083
+  timeout: 10000
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  service:
+    type: ClusterIP
+    port: 8083
+  resources: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
 cassandraInitDB:
   keyspace: thingsboard
   replication:
@@ -109,10 +205,13 @@ cassandra:
   enabled: false
   replicaCount: 1
   initDBConfigMap: '{{ .Release.Name }}-cassandra-init-db'
+  dbUser:
+    password: setplease
 
 postgresql-ha:
   nameOverride: postgresql-ha
   postgresql:
+    database: thingsboard
     replicaCount: 1
     password: setplease
     repmgrPassword: setplease
@@ -123,3 +222,7 @@ postgresql-ha:
     replicaCount: 1
   pgpoolImage:
     tag: 4
+
+redis:
+  # Set architecture to either standalone or replication
+  architecture: standalone

@@ -17,22 +17,22 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "thingsboard.fullname" . }}-node-db-config
+  name: {{ .Release.Name }}-node-db-config
   labels:
     name: '{{ .Release.Name }}-node-db-config'
     {{- include "thingsboard.labels" . | nindent 4 }}
 data:
 {{- if .Values.cassandra.enabled }}
   DATABASE_TS_TYPE: cassandra
-  CASSANDRA_URL: cassandra:9042
+  CASSANDRA_URL: {{ .Release.Name }}-cassandra:9042
   CASSANDRA_USE_CREDENTIALS: 'true'
-  CASSANDRA_USERNAME: cassandra
-  CASSANDRA_PASSWORD: cassandra
+  CASSANDRA_USERNAME: {{ .Values.cassandra.dbUser.user }}
+  CASSANDRA_PASSWORD: {{ .Values.cassandra.dbUser.password }}
 {{ else }}
   DATABASE_TS_TYPE: sql
 {{- end }}
   SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
   SPRING_DRIVER_CLASS_NAME: org.postgresql.Driver
-  SPRING_DATASOURCE_URL: jdbc:postgresql://tb-database:5432/thingsboard
-  SPRING_DATASOURCE_USERNAME: postgres
-  SPRING_DATASOURCE_PASSWORD: postgres
+  SPRING_DATASOURCE_URL: jdbc:postgresql://{{ .Release.Name }}-postgresql-ha-pgpool:5432/thingsboard
+  SPRING_DATASOURCE_USERNAME: {{ index .Values "postgresql-ha" "postgresql" "username" }}
+  SPRING_DATASOURCE_PASSWORD: {{ index .Values "postgresql-ha" "postgresql" "password" }}

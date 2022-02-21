@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "thingsboard.fullname" . }}-node
+  name: {{ .Release.Name }}-node
   labels:
     {{- include "thingsboard.labels" . | nindent 4 }}
 spec:
@@ -50,9 +50,9 @@ spec:
           - name: ZOOKEEPER_ENABLED
             value: "true"
           - name: ZOOKEEPER_URL
-            value: "zookeeper:2181"
+            value: "{{ .Release.Name }}-zookeeper:2181"
           - name: TB_KAFKA_SERVERS
-            value: "tb-kafka:9092"
+            value: "{{ .Release.Name }}-kafka-headless:9092"
           - name: JS_EVALUATOR
             value: "remote"
           - name: TRANSPORT_TYPE
@@ -62,15 +62,15 @@ spec:
           - name: CACHE_TYPE
             value: "redis"
           - name: REDIS_HOST
-            value: "tb-redis"
+            value: "{{ .Release.Name }}-redis-master"
           envFrom:
           - configMapRef:
-              name: {{ include "thingsboard.fullname" . }}-node-db-config
+              name: {{ .Release.Name }}-node-db-config
           volumeMounts:
             - mountPath: /config
-              name: {{ include "thingsboard.fullname" . }}-node-config
+              name: {{ .Release.Name }}-node-config
             - mountPath: /var/log/thingsboard
-              name: {{ include "thingsboard.fullname" . }}-node-logs
+              name: {{ .Release.Name }}-node-logs
           readinessProbe:
             httpGet:
               path: /login
@@ -84,15 +84,15 @@ spec:
           resources:
             {{- toYaml .Values.node.resources | nindent 12 }}
       volumes:
-        - name: {{ include "thingsboard.fullname" . }}-node-config
+        - name: {{ .Release.Name }}-node-config
           configMap:
-            name: {{ include "thingsboard.fullname" . }}-node-config
+            name: {{ .Release.Name }}-node-config
             items:
             - key: conf
               path:  thingsboard.conf
             - key: logback
               path:  logback.xml
-        - name: {{ include "thingsboard.fullname" . }}-node-logs
+        - name: {{ .Release.Name }}-node-logs
           emptyDir: {}
       {{- with .Values.node.nodeSelector }}
       nodeSelector:
