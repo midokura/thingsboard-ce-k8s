@@ -50,18 +50,34 @@ Selector labels
 app.kubernetes.io/name: {{ include "thingsboard.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-{{- define "thingsboard.selectorLabelsNode" -}}
+{{- define "thingsboard.selectorLabels-node" -}}
 app.kubernetes.io/name: {{ include "thingsboard.name" . }}-node
 app.kubernetes.io/instance: {{ .Release.Name }}-node
+{{- end }}
+{{- define "thingsboard.selectorLabels-mqtt" -}}
+app.kubernetes.io/name: {{ include "thingsboard.name" . }}-mqtt
+app.kubernetes.io/instance: {{ .Release.Name }}-mqtt
+{{- end }}
+{{- define "thingsboard.selectorLabels-http" -}}
+app.kubernetes.io/name: {{ include "thingsboard.name" . }}-http
+app.kubernetes.io/instance: {{ .Release.Name }}-http
+{{- end }}
+{{- define "thingsboard.selectorLabels-coap" -}}
+app.kubernetes.io/name: {{ include "thingsboard.name" . }}-coap
+app.kubernetes.io/instance: {{ .Release.Name }}-coap
+{{- end }}
+{{- define "thingsboard.selectorLabels-jsexecutor" -}}
+app.kubernetes.io/name: {{ include "thingsboard.name" . }}-jsexecutor
+app.kubernetes.io/instance: {{ .Release.Name }}-jsexecutor
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "thingsboard.node.serviceAccountName" -}}
-{{- if .Values.node.serviceAccount.create }}
-{{- default (include "thingsboard.fullname" .) .Values.node.serviceAccount.name }}
+{{- define "thingsboard.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "thingsboard.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
-{{- default "default" .Values.node.serviceAccount.name }}
+{{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}

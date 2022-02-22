@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: {{ .Values.node.kind }}
 metadata:
   name: {{ .Release.Name }}-node
   labels:
@@ -12,7 +12,7 @@ spec:
   podManagementPolicy: "Parallel"
   selector:
     matchLabels:
-      {{- include "thingsboard.selectorLabelsNode" . | nindent 6 }}
+      {{- include "thingsboard.selectorLabels-node" . | nindent 6 }}
   template:
     metadata:
     {{- with .Values.node.podAnnotations }}
@@ -20,13 +20,13 @@ spec:
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
-        {{- include "thingsboard.selectorLabelsNode" . | nindent 8 }}
+        {{- include "thingsboard.selectorLabels-node" . | nindent 8 }}
     spec:
       {{- with .Values.node.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "thingsboard.node.serviceAccountName" . }}
+      serviceAccountName: {{ include "thingsboard.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.node.podSecurityContext | nindent 8 }}
       containers:

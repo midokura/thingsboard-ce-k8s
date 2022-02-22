@@ -1,0 +1,37 @@
+{{- $values := .Values -}}
+{{- $fullname := include "thingsboard.fullname" . -}}
+{{- $releaseName := .Release.Name -}}
+{{- $labels := include "thingsboard.labels" . -}}
+{{- range tuple "node" "mqtt" "http" "coap" "jsexecutor" -}}
+  {{- $component := . -}}
+  {{- $componentvalues := index $values $component -}}
+  {{- if $componentvalues.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ $releaseName }}-{{ $component }}
+  labels:
+      {{- $labels | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: {{ $componentvalues.kind }}
+    name: {{ $releaseName }}-{{ $component }}
+  minReplicas: {{ $componentvalues.autoscaling.minReplicas }}
+  maxReplicas: {{ $componentvalues.autoscaling.maxReplicas }}
+  metrics:
+    {{- if $componentvalues.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ $componentvalues.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if $componentvalues.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ $componentvalues.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+  {{- end }}
+---
+{{- end }}

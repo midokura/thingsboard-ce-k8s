@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: {{ .Values.jsexecutor.kind }}
+metadata:
+  name: {{ .Release.Name }}-jsexecutor
+  labels:
+    {{- include "thingsboard.labels" . | nindent 4 }}
+spec:
+{{- if not .Values.jsexecutor.autoscaling.enabled }}
+  replicas: {{ .Values.jsexecutor.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "thingsboard.selectorLabels-jsexecutor" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.jsexecutor.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "thingsboard.selectorLabels-jsexecutor" . | nindent 8 }}
+    spec:
+      {{- with .Values.jsexecutor.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "thingsboard.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.jsexecutor.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.jsexecutor.securityContext | nindent 12 }}
+          image: "{{ .Values.jsexecutor.image.server | default .Values.global.image.server }}/{{ .Values.jsexecutor.image.repository }}:{{ .Values.jsexecutor.image.tag | default .Values.global.image.tag }}"
+          imagePullPolicy: {{ .Values.jsexecutor.image.pullPolicy | default .Values.global.image.pullPolicy}}
+          env:
+          - name: REMOTE_JS_EVAL_REQUEST_TOPIC
+            value: "js_eval.requests"
+          - name: TB_KAFKA_SERVERS
+            value: "{{ .Release.Name }}-kafka-headless:9092"
+          - name: LOGGER_LEVEL
+            value: "info"
+          - name: LOG_FOLDER
+            value: "logs"
+          - name: LOGGER_FILENAME
+            value: "tb-js-executor-%DATE%.log"
+          - name: DOCKER_MODE
+            value: "true"
+          - name: SCRIPT_BODY_TRACE_FREQUENCY
+            value: "1000"
+          resources:
+            {{- toYaml .Values.jsexecutor.resources | nindent 12 }}
+      {{- with .Values.jsexecutor.jsexecutorSelector }}
+      jsexecutorSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.jsexecutor.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.jsexecutor.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -9,11 +9,22 @@ global:
     tag: "3.3.3"
     pullSecrets: []
     pullPolicy: Always
+  jsonLogs: false
 
 nameOverride: ""
 fullnameOverride: ""
 
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+  
 node:
+  kind: StatefulSet
   loadDemo: false
 
   jsonLogs: false
@@ -31,15 +42,6 @@ node:
   port:
     http: 8080
     rpc: 9090
-  
-  serviceAccount:
-    # Specifies whether a service account should be created
-    create: true
-    # Annotations to add to the service account
-    annotations: {}
-    # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
-    name: ""
   
   podAnnotations: {}
   
@@ -96,8 +98,31 @@ node:
   
   affinity: {}
 
-mqttTransport:
-  jsonLogs: false
+jsexecutor:
+  kind: Deployment
+  image:
+    repository: thingsboard/tb-js-executor
+    # Overrides the global image values
+    #server: docker.io
+    #pullPolicy: Always
+    #tag: "X.Y.Z"
+  replicaCount: 1
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  resources: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+mqtt:
+  kind: StatefulSet
   image:
     repository: thingsboard/tb-mqtt-transport
     # Overrides the global image values
@@ -107,10 +132,6 @@ mqttTransport:
   replicaCount: 1
   port: 8081
   timeout: 10000
-  serviceAccount:
-    create: true
-    annotations: {}
-    name: ""
   podAnnotations: {}
   podSecurityContext: {}
   securityContext: {}
@@ -128,8 +149,8 @@ mqttTransport:
   tolerations: []
   affinity: {}
 
-httpTransport:
-  jsonLogs: false
+http:
+  kind: StatefulSet
   image:
     repository: thingsboard/tb-http-transport
     # Overrides the global image values
@@ -139,10 +160,6 @@ httpTransport:
   replicaCount: 1
   port: 8082
   timeout: 10000
-  serviceAccount:
-    create: true
-    annotations: {}
-    name: ""
   podAnnotations: {}
   podSecurityContext: {}
   securityContext: {}
@@ -160,8 +177,8 @@ httpTransport:
   tolerations: []
   affinity: {}
 
-coapTransport:
-  jsonLogs: false
+coap:
+  kind: StatefulSet
   image:
     repository: thingsboard/tb-coap-transport
     # Overrides the global image values
@@ -171,10 +188,6 @@ coapTransport:
   replicaCount: 1
   port: 8083
   timeout: 10000
-  serviceAccount:
-    create: true
-    annotations: {}
-    name: ""
   podAnnotations: {}
   podSecurityContext: {}
   securityContext: {}
