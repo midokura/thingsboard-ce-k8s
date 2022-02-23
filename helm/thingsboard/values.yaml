@@ -106,7 +106,7 @@ jsexecutor:
     #server: docker.io
     #pullPolicy: Always
     #tag: "X.Y.Z"
-  replicaCount: 1
+  replicaCount: 5
   podAnnotations: {}
   podSecurityContext: {}
   securityContext: {}
@@ -130,7 +130,10 @@ mqtt:
     #pullPolicy: Always
     #tag: "X.Y.Z"
   replicaCount: 1
-  port: 8081
+  port:
+    number: 8081
+    protocol: TCP
+    name: mqtt
   timeout: 10000
   podAnnotations: {}
   podSecurityContext: {}
@@ -158,7 +161,10 @@ http:
     #pullPolicy: Always
     #tag: "X.Y.Z"
   replicaCount: 1
-  port: 8082
+  port:
+    number: 8082
+    protocol: TCP
+    name: http
   timeout: 10000
   podAnnotations: {}
   podSecurityContext: {}
@@ -186,7 +192,10 @@ coap:
     #pullPolicy: Always
     #tag: "X.Y.Z"
   replicaCount: 1
-  port: 8083
+  port:
+    number: 8083
+    protocol: UDP
+    name: coap
   timeout: 10000
   podAnnotations: {}
   podSecurityContext: {}

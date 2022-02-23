@@ -1,0 +1,26 @@
+{{- $values := .Values -}}
+{{- $fullname := include "thingsboard.fullname" . -}}
+{{- $releaseName := .Release.Name -}}
+{{- $labels := include "thingsboard.labels" . -}}
+{{- range tuple "mqtt" "http" "coap" -}}
+  {{- $component := . -}}
+  {{- $componentValues := index $values $component -}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullname }}-{{ $component }}
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  type: {{ $componentValues.service.type }}
+  ports:
+    - port: {{ $componentValues.service.port }}
+      targetPort: {{ $componentValues.port.name }}
+      protocol: {{ $componentValues.port.protocol }}
+      name: {{ $componentValues.port.name }}
+  selector:
+    app.kubernetes.io/instance: {{ $releaseName}}-{{ $component }}
+    app.kubernetes.io/name: thingsboard-{{ $component }}
+---
+{{- end }}

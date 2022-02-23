@@ -8,6 +8,10 @@ spec:
 {{- if not .Values.jsexecutor.autoscaling.enabled }}
   replicas: {{ .Values.jsexecutor.replicaCount }}
 {{- end }}
+{{- if eq .Values.jsexecutor.kind "StatefulSet" }}
+  serviceName: tb-js-executor
+  podManagementPolicy: "Parallel"
+{{- end }}
   selector:
     matchLabels:
       {{- include "thingsboard.selectorLabels-jsexecutor" . | nindent 6 }}

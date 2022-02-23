@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: {{ .Values.mqtt.kind }}
+metadata:
+  name: {{ .Release.Name }}-mqtt-transport
+  labels:
+    {{- include "thingsboard.labels" . | nindent 4 }}
+spec:
+{{- if not .Values.mqtt.autoscaling.enabled }}
+  replicas: {{ .Values.mqtt.replicaCount }}
+{{- end }}
+{{- if eq .Values.mqtt.kind "StatefulSet" }}
+  podManagementPolicy: "Parallel"
+  serviceName: tb-mqtt-transport
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "thingsboard.selectorLabels-mqtt" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.mqtt.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "thingsboard.selectorLabels-mqtt" . | nindent 8 }}
+    spec:
+      {{- with .Values.mqtt.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "thingsboard.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.mqtt.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.mqtt.securityContext | nindent 12 }}
+          image: "{{ .Values.mqtt.image.server | default .Values.global.image.server }}/{{ .Values.mqtt.image.repository }}:{{ .Values.mqtt.image.tag | default .Values.global.image.tag }}"
+          imagePullPolicy: {{ .Values.mqtt.image.pullPolicy | default .Values.global.image.pullPolicy}}
+          ports:
+          - containerPort: {{ .Values.mqtt.port.number }}
+            name: {{ .Values.mqtt.port.name }}
+          env:
+          - name: TB_SERVICE_ID
+            value: "tb-mqtt-transport"
+          - name: TB_QUEUE_TYPE
+            value: "kafka"
+          - name: MQTT_BIND_ADDRESS
+            value: "0.0.0.0"
+          - name: MQTT_BIND_PORT
+            value: "{{ .Values.mqtt.port.number }}"
+          - name: MQTT_TIMEOUT
+            value: "{{ .Values.mqtt.timeout }}"
+          - name: TB_KAFKA_SERVERS
+            value: "{{ .Release.Name }}-kafka-headless:9092"
+          volumeMounts:
+            - mountPath: /config
+              name: {{ .Release.Name }}-mqtt-transport-config
+          readinessProbe:
+            periodSeconds: 20
+            tcpSocket:
+              port: {{ .Values.mqtt.port.number }}
+          livenessProbe:
+            initialDelaySeconds: 120
+            periodSeconds: 20
+            tcpSocket:
+              port: {{ .Values.mqtt.port.number }}
+          resources:
+            {{- toYaml .Values.mqtt.resources | nindent 12 }}
+      volumes:
+        - name: {{ .Release.Name }}-mqtt-transport-config
+          configMap:
+            name: {{ .Release.Name }}-mqtt-transport-config
+            items:
+            - key: conf
+              path:  tb-mqtt-transport.conf
+            - key: logback
+              path:  logback.xml
+        - name: {{ .Release.Name }}-node-logs
+          emptyDir: {}
+      {{- with .Values.mqtt.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.mqtt.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.mqtt.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

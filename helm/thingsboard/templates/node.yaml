@@ -5,11 +5,13 @@ metadata:
   labels:
     {{- include "thingsboard.labels" . | nindent 4 }}
 spec:
-  serviceName: tb-node
 {{- if not .Values.node.autoscaling.enabled }}
   replicas: {{ .Values.node.replicaCount }}
 {{- end }}
+{{- if eq .Values.node.kind "StatefulSet" }}
+  serviceName: tb-node
   podManagementPolicy: "Parallel"
+{{- end }}
   selector:
     matchLabels:
       {{- include "thingsboard.selectorLabels-node" . | nindent 6 }}
