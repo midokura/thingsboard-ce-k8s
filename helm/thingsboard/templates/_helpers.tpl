@@ -70,6 +70,10 @@ app.kubernetes.io/instance: {{ .Release.Name }}-coap
 app.kubernetes.io/name: {{ include "thingsboard.name" . }}-jsexecutor
 app.kubernetes.io/instance: {{ .Release.Name }}-jsexecutor
 {{- end }}
+{{- define "thingsboard.selectorLabels-webui" -}}
+app.kubernetes.io/name: {{ include "thingsboard.name" . }}-webui
+app.kubernetes.io/instance: {{ .Release.Name }}-webui
+{{- end }}
 
 {{/*
 Create the name of the service account to use

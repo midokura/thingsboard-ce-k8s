@@ -1,15 +1,14 @@
 {{- $values := .Values -}}
-{{- $fullname := include "thingsboard.fullname" . -}}
 {{- $releaseName := .Release.Name -}}
 {{- $labels := include "thingsboard.labels" . -}}
-{{- range tuple "mqtt" "http" "coap" -}}
+{{- range tuple "mqtt" "http" "coap" "webui" -}}
   {{- $component := . -}}
   {{- $componentValues := index $values $component -}}
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $fullname }}-{{ $component }}
+  name: {{ $releaseName }}-{{ $component }}
   labels:
     {{- $labels | nindent 4 }}
 spec:

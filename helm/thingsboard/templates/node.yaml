@@ -65,6 +65,8 @@ spec:
             value: "redis"
           - name: REDIS_HOST
             value: "{{ .Release.Name }}-redis-master"
+          - name: REDIS_PASSWORD
+            value: "{{ .Values.redis.auth.password }}"
           envFrom:
           - configMapRef:
               name: {{ .Release.Name }}-node-db-config
