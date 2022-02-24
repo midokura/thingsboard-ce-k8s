@@ -45,17 +45,37 @@ spec:
             value: "tb-mqtt-transport"
           - name: TB_QUEUE_TYPE
             value: "kafka"
-          - name: MQTT_BIND_ADDRESS
-            value: "0.0.0.0"
-          - name: MQTT_BIND_PORT
-            value: "{{ .Values.mqtt.port.number }}"
           - name: MQTT_TIMEOUT
             value: "{{ .Values.mqtt.timeout }}"
           - name: TB_KAFKA_SERVERS
             value: "{{ .Release.Name }}-kafka-headless:9092"
+          {{- if eq .Values.mqtt.ssl.enabled true }}
+          - name: MQTT_SSL_ENABLED
+            value: "true"
+          - name: MQTT_SSL_CREDENTIALS_TYPE
+            value: "PEM"
+          - name: MQTT_SSL_PEM_CERT
+            value: /mqtt-certs/mqttserver.pem
+          - name: MQTT_SSL_PEM_KEY
+            value: /mqtt-certs/mqttserver_key.pem
+          - name: MQTT_SSL_BIND_ADDRESS
+            value: "0.0.0.0"
+          - name: MQTT_SSL_BIND_PORT
+            value: "{{ .Values.mqtt.port.number }}"
+          {{- else }}
+          - name: MQTT_BIND_ADDRESS
+            value: "0.0.0.0"
+          - name: MQTT_BIND_PORT
+            value: "{{ .Values.mqtt.port.number }}"
+          {{- end }}
           volumeMounts:
             - mountPath: /config
               name: {{ .Release.Name }}-mqtt-transport-config
+          {{- if eq .Values.mqtt.ssl.enabled true }}
+            - mountPath: /mqtt-certs
+              name: mqtt-certs
+              readOnly: true
+          {{- end }}
           readinessProbe:
             periodSeconds: 20
             tcpSocket:
@@ -78,6 +98,17 @@ spec:
               path:  logback.xml
         - name: {{ .Release.Name }}-node-logs
           emptyDir: {}
+        {{- if eq .Values.mqtt.ssl.enabled true }}
+        - name: mqtt-certs
+          secret:
+            defaultMode: 420
+            items:
+            - key: {{ .Values.mqtt.ssl.cert }}
+              path: mqttserver.pem
+            - key: {{ .Values.mqtt.ssl.key }}
+              path: mqttserver_key.pem
+            secretName: {{ .Values.mqtt.ssl.secret }}
+        {{- end }}
       {{- with .Values.mqtt.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

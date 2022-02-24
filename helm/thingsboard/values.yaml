@@ -127,6 +127,11 @@ mqtt:
     #pullPolicy: Always
     #tag: "X.Y.Z"
   replicaCount: 1
+  ssl:
+    enabled: false
+    secret: kubernetes-secret
+    cert: tls.crt
+    key: tls.key
   port:
     number: 8081
     protocol: TCP
