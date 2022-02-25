@@ -13,8 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-{{- if .Values.cassandra.enabled }}
+{{ if .Values.cassandra.enabled }}
 {{- $_ := set .Values.cassandra "initDBConfigMap"  "{{ .Release.Name }}-cassandra-init-db" -}}
 
 apiVersion: v1

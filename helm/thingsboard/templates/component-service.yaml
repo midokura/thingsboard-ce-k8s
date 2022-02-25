@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-{{- $values := .Values -}}
+{{ $values := .Values -}}
 {{- $releaseName := .Release.Name -}}
 {{- $labels := include "thingsboard.labels" . -}}
 {{- range tuple "mqtt" "http" "coap" "webui" -}}
