@@ -1,7 +1,18 @@
-# Default values for thingsboard.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
+#
+# Copyright © 2016-2020 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 
 global:
   image:
@@ -34,30 +45,22 @@ ingress:
   
 
 node:
+  # kind can be either Deployment or StatefulSet
   kind: StatefulSet
   loadDemo: false
-
-  jsonLogs: false
-
   replicaCount: 1
-  
   image:
     repository: thingsboard/tb-node
-
     # Overrides the global image values
     #server: docker.io
     #pullPolicy: Always
     #tag: "X.Y.Z"
-
   port:
     http: 8080
     rpc: 9090
-  
   podAnnotations: {}
-  
   podSecurityContext: {}
     # fsGroup: 2000
-  
   securityContext: {}
     # capabilities:
     #   drop:
@@ -65,11 +68,9 @@ node:
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
     # runAsUser: 1000
-  
   service:
     type: ClusterIP
-    port: 80
-  
+    port: 8080
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
     # choice for the user. This also increases chances charts run on environments with little
@@ -81,21 +82,18 @@ node:
     # requests:
     #   cpu: 100m
     #   memory: 128Mi
-  
   autoscaling:
     enabled: false
     minReplicas: 1
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
-  
   nodeSelector: {}
-  
   tolerations: []
-  
   affinity: {}
 
 jsexecutor:
+  # kind can be either Deployment or StatefulSet
   kind: Deployment
   image:
     repository: thingsboard/tb-js-executor
@@ -119,6 +117,7 @@ jsexecutor:
   affinity: {}
 
 mqtt:
+  # kind can be either Deployment or StatefulSet
   kind: StatefulSet
   image:
     repository: thingsboard/tb-mqtt-transport
@@ -155,6 +154,7 @@ mqtt:
   affinity: {}
 
 http:
+  # kind can be either Deployment or StatefulSet
   kind: StatefulSet
   image:
     repository: thingsboard/tb-http-transport
@@ -186,6 +186,7 @@ http:
   affinity: {}
 
 coap:
+  # kind can be either Deployment or StatefulSet
   kind: StatefulSet
   image:
     repository: thingsboard/tb-coap-transport
@@ -217,6 +218,7 @@ coap:
   affinity: {}
 
 webui:
+  # kind can be either Deployment or StatefulSet
   kind: Deployment
   image:
     repository: thingsboard/tb-web-ui
