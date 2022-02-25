@@ -1,7 +1,12 @@
 {{- if .Values.cassandra.enabled }}
+{{- $_ := set .Values.cassandra "initDBConfigMap"  "{{ .Release.Name }}-cassandra-init-db" -}}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "0"
   name: '{{ .Release.Name }}-cassandra-init-db'
   labels:
     name: '{{ .Release.Name }}-cassandra-init-db'

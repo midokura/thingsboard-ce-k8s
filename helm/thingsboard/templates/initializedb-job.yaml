@@ -4,7 +4,6 @@ metadata:
   name: '{{ .Release.Name }}-init-tb-db'
   labels:
     {{- include "thingsboard.labels" . | nindent 4 }}
-  annotations:
 spec:
   ttlSecondsAfterFinished: 0
   template:

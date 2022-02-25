@@ -9,12 +9,12 @@ helm install --create-namespace -n thingsboard thingsboard thingsboard
 * Hybrid database (Cassandra for timeseries)
 ```
 helm install --create-namespace -n thingsboard thingsboard thingsboard \
-  --set cassandra.enable=true
+  --set cassandra.enabled=true
 ```
 * Hybrid database and set passwords
 ```
 helm install --create-namespace -n thingsboard thingsboard thingsboard \
-  --set cassandra.enable=true \
+  --set cassandra.enabled=true \
   --set postgresql-ha.postgresql.password=SET \
   --set postgresql-ha.postgresql.repmgrPassword=REALLY \
   --set postgresql-ha.pgpool.adminPassword=SECURE \

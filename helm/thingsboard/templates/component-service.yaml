@@ -22,4 +22,4 @@ spec:
     app.kubernetes.io/instance: {{ $releaseName}}-{{ $component }}
     app.kubernetes.io/name: thingsboard-{{ $component }}
 ---
-{{- end }}
+{{ end }}

@@ -258,7 +258,6 @@ cassandra:
   # for an hybrid database set cassandra.enabled as true
   enabled: false
   replicaCount: 1
-  initDBConfigMap: '{{ .Release.Name }}-cassandra-init-db'
   dbUser:
     password: setplease
 
