@@ -68,9 +68,11 @@ spec:
           - name: ZOOKEEPER_ENABLED
             value: "true"
           - name: ZOOKEEPER_URL
-            value: "{{ .Release.Name }}-zookeeper:2181"
+            value: "{{ .Release.Name }}-zookeeper:{{ .Values.kafka.zookeeper.containerPorts.client }}"
           - name: TB_KAFKA_SERVERS
-            value: "{{ .Release.Name }}-kafka-headless:9092"
+            value: "{{ .Release.Name }}-kafka:{{ .Values.kafka.service.ports.client }}"
+          - name: TB_QUEUE_KAFKA_REPLICATION_FACTOR
+            value: "{{ .Values.kafka.offsetsTopicReplicationFactor }}"
           - name: JS_EVALUATOR
             value: "remote"
           - name: TRANSPORT_TYPE

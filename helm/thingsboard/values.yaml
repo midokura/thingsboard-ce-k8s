@@ -39,7 +39,8 @@ ingress:
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  host: chart-example.local
+  hosts:
+    - chart-example.local
   # Enable or disable tls, same host as above
   tls: false
   
@@ -129,8 +130,6 @@ mqtt:
   ssl:
     enabled: false
     secret: kubernetes-secret
-    cert: tls.crt
-    key: tls.key
   port:
     number: 8081
     protocol: TCP
@@ -264,7 +263,7 @@ cassandra:
     password: setplease
 
 postgresql-ha:
-  nameOverride: postgresql-ha
+  nameOverride: pg
   postgresql:
     database: thingsboard
     replicaCount: 1
@@ -275,6 +274,7 @@ postgresql-ha:
   pgpool:
     adminPassword: setplease
     replicaCount: 1
+    useLoadBalancing: false
   pgpoolImage:
     tag: 4
 
@@ -283,3 +283,20 @@ redis:
   architecture: standalone
   auth:
     password: setplease
+  master:
+    kind: Deployment
+    persistence:
+      enabled: false
+    disableCommands:
+      - FLUSHALL
+  replica:
+    replicaCount: 0
+    persistence:
+      enabled: false
+
+kafka:
+  persistence:
+    enabled: false
+  zookeeper:
+    persistence:
+      enabled: false

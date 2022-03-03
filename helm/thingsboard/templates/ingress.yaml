@@ -17,7 +17,8 @@
 {{ if .Values.ingress.enabled -}}
 {{- $fullName := include "thingsboard.fullname" . -}}
 {{- $releaseName := .Release.Name -}}
-{{- $ingressHost := .Values.ingress.host -}}
+{{- $ingressHosts := .Values.ingress.hosts -}}
+{{- $values := .Values -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -32,95 +33,99 @@ spec:
   {{- with .Values.ingress.tls }}
   tls:
   - hosts:
-    - {{ $ingressHost }}
+      {{- range $ingressHosts }}
+      - {{ . | quote }}
+      {{- end }}
     secretName: {{ $releaseName }}-tls
   {{- end }}
   rules:
-    - host: {{ $ingressHost }}
+    {{- range $ingressHosts }}
+    - host: {{ . | quote }}
       http:
          paths:
           - path: /api/v1/.*
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ .Release.Name }}-http
+                name: {{ $releaseName }}-http
                 port:
-                  number: {{ .Values.http.service.port }}
+                  number: {{ $values.http.service.port }}
           - path: /api/.*
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ .Release.Name }}-node
+                name: {{ $releaseName }}-node
                 port:
-                  number: {{ .Values.node.service.port }}
+                  number: {{ $values.node.service.port }}
           - path: /swagger.*
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ .Release.Name }}-node
+                name: {{ $releaseName }}-node
                 port:
-                  number: {{ .Values.node.service.port }}
+                  number: {{ $values.node.service.port }}
           - path: /webjars.*
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ .Release.Name }}-node
+                name: {{ $releaseName }}-node
                 port:
-                  number: {{ .Values.node.service.port }}
+                  number: {{ $values.node.service.port }}
           - path: /v2/.*
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ .Release.Name }}-node
+                name: {{ $releaseName }}-node
                 port:
-                  number: {{ .Values.node.service.port }}
+                  number: {{ $values.node.service.port }}
           - path: /v3/.*
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ .Release.Name }}-node
+                name: {{ $releaseName }}-node
                 port:
-                  number: {{ .Values.node.service.port }}
+                  number: {{ $values.node.service.port }}
           - path: /static/rulenode/.*
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ .Release.Name }}-node
+                name: {{ $releaseName }}-node
                 port:
-                  number: {{ .Values.node.service.port }}
+                  number: {{ $values.node.service.port }}
           - path: /assets/help/.*/rulenode/.*
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ .Release.Name }}-node
+                name: {{ $releaseName }}-node
                 port:
-                  number: {{ .Values.node.service.port }}
+                  number: {{ $values.node.service.port }}
           - path: /oauth2/.*
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ .Release.Name }}-node
+                name: {{ $releaseName }}-node
                 port:
-                  number: {{ .Values.node.service.port }}
+                  number: {{ $values.node.service.port }}
           - path: /login/oauth2/.*
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ .Release.Name }}-node
+                name: {{ $releaseName }}-node
                 port:
-                  number: {{ .Values.node.service.port }}
+                  number: {{ $values.node.service.port }}
           - path: /
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ .Release.Name }}-webui
+                name: {{ $releaseName }}-webui
                 port:
-                  number: {{ .Values.webui.service.port }}
+                  number: {{ $values.webui.service.port }}
           - path: /.*
             pathType: ImplementationSpecific
             backend:
               service:
-                name: {{ .Release.Name }}-webui
+                name: {{ $releaseName }}-webui
                 port:
-                  number: {{ .Values.webui.service.port }}
+                  number: {{ $values.webui.service.port }}
+    {{- end }}
 {{- end }}

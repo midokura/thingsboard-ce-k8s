@@ -33,6 +33,6 @@ data:
 {{- end }}
   SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
   SPRING_DRIVER_CLASS_NAME: org.postgresql.Driver
-  SPRING_DATASOURCE_URL: jdbc:postgresql://{{ .Release.Name }}-postgresql-ha-pgpool:5432/thingsboard
+  SPRING_DATASOURCE_URL: jdbc:postgresql://{{ include "thingsboard.pgpoolservicename" . }}:{{ index .Values "postgresql-ha" "pgpool" "containerPort" }}/{{ index .Values "postgresql-ha" "postgresql" "database" }}
   SPRING_DATASOURCE_USERNAME: {{ index .Values "postgresql-ha" "postgresql" "username" }}
   SPRING_DATASOURCE_PASSWORD: {{ index .Values "postgresql-ha" "postgresql" "password" }}

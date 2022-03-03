@@ -18,7 +18,7 @@ limitations under the License.
 
 1. Get node URL by running these commands:
 {{- if .Values.ingress.enabled }}
-{{- $host := .Values.ingress.host }}
+{{- $host := first .Values.ingress.hosts }}
 http{{ with .Values.ingress.tls }}s{{ end }}://{{ $host }}
 {{- else if contains "NodePort" .Values.node.service.type }}
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "thingsboard.fullname" . }}-node)

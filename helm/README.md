@@ -25,28 +25,45 @@ helm install --create-namespace -n thingsboard thingsboard thingsboard \
 ```
 helm install --create-namespace -n thingsboard thingsboard thingsboard \
   --set mqtt.replicaCount=3 \
-  --set http.replicacount=0 \
-  --set coap.replicacount=0
+  --set http.replicaCount=0 \
+  --set coap.replicaCount=0
 ```
 * Enable ingress and TLS for API REST (requirements `cert-manager` and `nginx-ingress`)
 ```
 helm install --create-namespace -n thingsboard thingsboard thingsboard \
   --set ingress.enabled=true \
   --set ingress.tls=true \
-  --set ingress.host=myurl.example.com \
+  --set ingress.hosts[0]=my-host.example.com \
   --set ingress.annotations."cert-manager\.io/cluster-issuer"=letsencrypt \
   --set-string ingress.annotations."nginx\.ingress\.kubernetes\.io/proxy-read-timeout"=3600 \
   --set-string ingress.annotations."nginx\.ingress\.kubernetes\.io/ssl-redirect"=true \
   --set ingress.annotations."kubernetes\.io/ingress\.class"=nginx \
   --set-string ingress.annotations."nginx\.ingress\.kubernetes\.io/use-regex"=true
 ```
-* Enable MQTT SSL (requirements: public and private keys in a Kubernetes secret, for example by using `cert-manager`)
+* Enable MQTT SSL (requirements: public and private keys in a Kubernetes secret with key name being `tls.key` and `tls.crt` respectively, for example by using `cert-manager`)
 ```
+cat << EOF | kubectl apply -f -
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mqtt
+  namespace: thingsboard
+spec:
+  secretName: mqtt-tls-secret
+  dnsNames:
+    - my-mqtt-host.example.com
+  issuerRef:
+    name: letsencrypt-dns
+    kind: ClusterIssuer
+    group: cert-manager.io
+  usages:
+  - digital signature
+  - key encipherment
+EOF
+
 helm install --create-namespace -n thingsboard thingsboard thingsboard \
   --set mqtt.ssl.enabled=true \
-  --set mqtt.ssl.secret=my-secret \
-  --set mqtt.ssl.cert=tls.crt \
-  --set mqtt.ssl.key=tls.key
+  --set mqtt.ssl.secret=mqtt-tls-secret \
 ```
 ## All options
 * For the full list of options of this helm chart:

@@ -64,7 +64,9 @@ spec:
           - name: MQTT_TIMEOUT
             value: "{{ .Values.mqtt.timeout }}"
           - name: TB_KAFKA_SERVERS
-            value: "{{ .Release.Name }}-kafka-headless:9092"
+            value: "{{ .Release.Name }}-kafka:{{ .Values.kafka.service.ports.client }}"
+          - name: TB_QUEUE_KAFKA_REPLICATION_FACTOR
+            value: "{{ .Values.kafka.offsetsTopicReplicationFactor }}"
           {{- if eq .Values.mqtt.ssl.enabled true }}
           - name: MQTT_SSL_ENABLED
             value: "true"
@@ -119,9 +121,9 @@ spec:
           secret:
             defaultMode: 420
             items:
-            - key: {{ .Values.mqtt.ssl.cert }}
+            - key: tls.crt
               path: mqttserver.pem
-            - key: {{ .Values.mqtt.ssl.key }}
+            - key: tls.key
               path: mqttserver_key.pem
             secretName: {{ .Values.mqtt.ssl.secret }}
         {{- end }}

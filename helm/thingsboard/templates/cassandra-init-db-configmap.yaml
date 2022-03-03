@@ -19,18 +19,20 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "0"
   name: '{{ .Release.Name }}-cassandra-init-db'
   labels:
     name: '{{ .Release.Name }}-cassandra-init-db'
     {{- include "thingsboard.labels" . | nindent 4 }}
 data:
   "01-init.cql": |
-     CREATE KEYSPACE IF NOT EXISTS {{ .Values.cassandraInitDB.keyspace }}
-       WITH replication = {
-         'class' : '{{ .Values.cassandraInitDB.replication.class }}',
-         'replication_factor' : {{ .Values.cassandraInitDB.replication.factor }}
-       };
+    CREATE KEYSPACE IF NOT EXISTS {{ .Values.cassandraInitDB.keyspace }}
+      WITH replication = {
+        'class' : '{{ .Values.cassandraInitDB.replication.class }}',
+        'replication_factor' : {{ .Values.cassandraInitDB.replication.factor }}
+      };
+    ALTER KEYSPACE system_auth
+      WITH REPLICATION = {
+        'class' : '{{ .Values.cassandraInitDB.replication.class }}',
+        'replication_factor' : {{ .Values.cassandraInitDB.replication.factor }}
+      };
 {{- end }}

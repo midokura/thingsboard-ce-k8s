@@ -68,7 +68,9 @@ spec:
           - name: HTTP_REQUEST_TIMEOUT
             value: "{{ .Values.http.timeout }}"
           - name: TB_KAFKA_SERVERS
-            value: "{{ .Release.Name }}-kafka-headless:9092"
+            value: "{{ .Release.Name }}-kafka:{{ .Values.kafka.service.ports.client }}"
+          - name: TB_QUEUE_KAFKA_REPLICATION_FACTOR
+            value: "{{ .Values.kafka.offsetsTopicReplicationFactor }}"
           volumeMounts:
             - mountPath: /config
               name: {{ .Release.Name }}-http-transport-config
