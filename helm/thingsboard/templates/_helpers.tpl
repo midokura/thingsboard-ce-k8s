@@ -14,9 +14,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-*/}}
-{{/* vim: set filetype=mustache: */}}
-
 {{/*
 Fetch PostgreSQL pgpool service name from Bitnami's postgresql-ha sub-chart, with regard to it's nameOverride value
 https://stackoverflow.com/questions/49142353/helm-getting-subchart-service-names
