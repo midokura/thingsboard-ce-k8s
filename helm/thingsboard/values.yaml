@@ -43,7 +43,8 @@ ingress:
     - chart-example.local
   # Enable or disable tls, same host as above
   tls: false
-  
+
+
 
 node:
   # kind can be either Deployment or StatefulSet
@@ -257,6 +258,15 @@ cassandraInitDB:
     class: SimpleStrategy
     factor: 1
 
+initDBJob:
+  # set 'operation' to 'install' to create database
+  # and set to 'upgrade' to update the database to latest version
+  # starting at 'fromVersion' 
+  operation: "install"
+  # with the current version of the database for triggering the
+  # upgrade. 
+  fromVersion: ""
+
 postgresInitDB:
   job:
     check:
@@ -271,6 +281,9 @@ cassandra:
   replicaCount: 1
   dbUser:
     password: setplease
+  extraEnvVars:
+  - name: JVM_OPTS
+    value: "-Dcom.sun.management.jmxremote.authenticate=true -Dcassandra.jmx.remote.login.config=CassandraLogin -Djava.security.auth.login.config=/opt/bitnami/cassandra/conf/cassandra-jaas.config -Dcassandra.jmx.authorizer=org.apache.cassandra.auth.jmx.AuthorizationProxy -Dcassandra.jmx.remote.port=7199"
 
 postgresql-ha:
   nameOverride: pg
