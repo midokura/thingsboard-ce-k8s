@@ -54,7 +54,7 @@ node:
   # kind can be either Deployment or StatefulSet
   kind: StatefulSet
   loadDemo: false
-  replicaCount: 1
+  replicaCount: 0
   image:
     repository: thingsboard/tb-node
     # Overrides the global image values
@@ -115,7 +115,7 @@ jsexecutor:
     #server: docker.io
     #pullPolicy: Always
     #tag: "X.Y.Z"
-  replicaCount: 5
+  replicaCount: 0
   podAnnotations: {}
   podSecurityContext: {}
   securityContext: {}
@@ -139,7 +139,7 @@ mqtt:
     #server: docker.io
     #pullPolicy: Always
     #tag: "X.Y.Z"
-  replicaCount: 1
+  replicaCount: 0
   ssl:
     enabled: false
     secret: kubernetes-secret
@@ -186,7 +186,7 @@ http:
     #server: docker.io
     #pullPolicy: Always
     #tag: "X.Y.Z"
-  replicaCount: 1
+  replicaCount: 0
   port:
     number: 8082
     protocol: TCP
@@ -220,7 +220,7 @@ coap:
     #server: docker.io
     #pullPolicy: Always
     #tag: "X.Y.Z"
-  replicaCount: 1
+  replicaCount: 0
   port:
     number: 8083
     protocol: UDP
@@ -254,7 +254,7 @@ webui:
     #server: docker.io
     #pullPolicy: Always
     #tag: "X.Y.Z"
-  replicaCount: 1
+  replicaCount: 0
   port:
     number: 8084
     protocol: TCP
