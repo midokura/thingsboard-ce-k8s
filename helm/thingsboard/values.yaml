@@ -105,6 +105,13 @@ node:
   authorization:
     tokenExpirationTimeSeconds: "9000"
     refreshTokenExpirationTimeSeconds: "604800"
+  extraEnvVars:
+  - key: SQL_TTL_TS_ENABLED
+    value: "true"
+  - key: SQL_TTL_TS_EXECUTION_INTERVAL
+    value: "3600000"
+  - key: SQL_TTL_TS_TS_KEY_VALUE_TTL
+    value: "7200"
 
 jsexecutor:
   # kind can be either Deployment or StatefulSet
