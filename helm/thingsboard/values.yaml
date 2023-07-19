@@ -163,6 +163,7 @@ mqtt:
     type: ClusterIP
     port: 8883
     additionalPorts: []
+    loadBalancerSourceRanges: []
   resources: {}
   autoscaling:
     enabled: false
