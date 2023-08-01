@@ -3,6 +3,33 @@ entries:
   thingsboard:
   - apiVersion: v2
     appVersion: 3.5.1
+    created: "2023-08-01T13:07:39.977711488Z"
+    dependencies:
+    - condition: postgresql-ha.enabled
+      name: postgresql-ha
+      repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+      version: 11.8.1
+    - condition: cassandra.enabled
+      name: cassandra
+      repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+      version: 9.1.8
+    - name: kafka
+      repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+      version: 15.3.4
+    - name: redis
+      repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+      version: 16.4.5
+    description: A Helm chart for Thingsboard
+    digest: c736a6be91d8d456ae10854a07a660b4d68a8844d4ba997fff84b60e44d6b3ef
+    home: https://github.com/thingsboard/thingsboard-ce-k8s/
+    icon: https://avatars.githubusercontent.com/u/24291394?s=200&v=4
+    name: thingsboard
+    type: application
+    urls:
+    - https://github.com/midokura/thingsboard-ce-k8s/releases/download/thingsboard-0.1.4-rc.20/thingsboard-0.1.4-rc.20.tgz
+    version: 0.1.4-rc.20
+  - apiVersion: v2
+    appVersion: 3.5.1
     created: "2023-07-19T09:31:33.379616893Z"
     dependencies:
     - condition: postgresql-ha.enabled
@@ -683,4 +710,4 @@ entries:
     urls:
     - https://github.com/midokura/thingsboard-ce-k8s/releases/download/thingsboard-0.1.0/thingsboard-0.1.0.tgz
     version: 0.1.0
-generated: "2023-07-19T09:31:33.379906392Z"
+generated: "2023-08-01T13:07:39.978132382Z"
