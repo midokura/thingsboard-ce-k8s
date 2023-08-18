@@ -104,7 +104,7 @@ spec:
             value: "{{ .Values.mqtt.port.number }}"
           {{- end }}
           {{- range .Values.mqtt.extraEnvVars }}
-          - name: {{ .key }}
+          - name: {{ .key | upper  }}
             value: {{ .value | quote }}
           {{- end }}
           volumeMounts:
