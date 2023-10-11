@@ -30,4 +30,5 @@ jobs:
           charts_dir: helm
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          HELM_EXPERIMENTAL_OCI: 1
 
