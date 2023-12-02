@@ -50,6 +50,13 @@ spec:
                 name: {{ $releaseName }}-http
                 port:
                   number: {{ $values.http.service.port }}
+          - path: /api
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ $releaseName }}-node
+                port:
+                  number: {{ $values.node.service.port }}
           - path: /api/.*
             pathType: ImplementationSpecific
             backend:
