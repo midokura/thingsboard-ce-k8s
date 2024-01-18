@@ -185,6 +185,9 @@ mqtt:
   tolerations: []
   affinity: {}
   annotations: {}
+  extraEnvVars:
+  - key: NETTY_MAX_PAYLOAD_SIZE
+    value: 132096
 
 http:
   # kind can be either Deployment or StatefulSet
