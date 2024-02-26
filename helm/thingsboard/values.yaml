@@ -371,6 +371,10 @@ redis:
     replicaCount: 0
     persistence:
       enabled: false
+    containerSecurityContext:
+      enabled: true
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
 
 kafka:
   persistence:
