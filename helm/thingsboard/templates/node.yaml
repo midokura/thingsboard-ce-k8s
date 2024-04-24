@@ -101,6 +101,8 @@ spec:
             value: "{{ .Release.Name }}-kafka:{{ .Values.kafka.service.ports.client }}"
           - name: TB_QUEUE_KAFKA_REPLICATION_FACTOR
             value: "{{ .Values.kafka.offsetsTopicReplicationFactor }}"
+          - name: TB_QUEUE_KAFKA_TA_TOPIC_PROPERTIES
+            value: {{ .Values.kafka.partitions | default 10 | quote }}
           - name: JS_EVALUATOR
             value: "remote"
           - name: TRANSPORT_TYPE
