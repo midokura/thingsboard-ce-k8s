@@ -393,6 +393,8 @@ kafka:
   zookeeper:
     persistence:
       enabled: false
+  queues:
+    numPartitions: 2
 
 sql:
   attributes:
