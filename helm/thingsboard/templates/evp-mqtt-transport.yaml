@@ -49,10 +49,8 @@ spec:
         admission.datadoghq.com/enabled: "true"
         {{- include "thingsboard.selectorLabels-mqtt" . | nindent 8 }}
     spec:
-      {{- with .Values.mqtt.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - {{ .Release.Name }}-evp-container-registry
       serviceAccountName: {{ include "thingsboard.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.mqtt.podSecurityContext | nindent 8 }}
