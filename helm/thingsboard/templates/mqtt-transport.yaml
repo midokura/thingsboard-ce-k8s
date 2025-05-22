@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-{{- if not .Values.tbRemoval.evpMqtt.enabled }}
+{{- if not .Values.evp.mqtt.enabled }}
 apiVersion: apps/v1
 kind: {{ .Values.mqtt.kind }}
 metadata:
