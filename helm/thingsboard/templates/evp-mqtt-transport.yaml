@@ -60,7 +60,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.mqtt.securityContext | nindent 12 }}
-          image: "{{ .Values.mqtt.evpImage }}"
+          image: "{{ .Values.mqtt.evp.image.server }}/{{ .Values.mqtt.evp.image.repository }}:{{ .Values.mqtt.evp.image.tag }}"
           imagePullPolicy: {{ .Values.mqtt.image.pullPolicy | default .Values.global.image.pullPolicy}}
           ports:
           - containerPort: {{ .Values.mqtt.port.number }}
