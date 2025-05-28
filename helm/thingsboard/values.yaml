@@ -149,7 +149,11 @@ jsexecutor:
 mqtt:
   # kind can be either Deployment or StatefulSet
   kind: StatefulSet
-  evpImage: ghcr.io/midokura/evp-mqtt:3.5.1-mido-c3354cf56e913657d6386e6d8f2c8f5d8d329a8f 
+  evp:
+    image:
+      server: setplease
+      repository: setplease
+      tag: setplease
   image:
     repository: thingsboard/tb-mqtt-transport
     # Overrides the global image values
