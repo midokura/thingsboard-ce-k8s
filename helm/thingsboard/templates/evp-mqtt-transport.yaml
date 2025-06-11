@@ -112,6 +112,8 @@ spec:
           - name: MQTT_BIND_PORT
             value: "{{ .Values.mqtt.port.number }}"
           {{- end }}
+          - name: EVP_CONFIG_PATH
+            value: /evp-config/evp-mqtt-config.yaml
           {{- range .Values.mqtt.extraEnvVars }}
           - name: {{ .key | upper  }}
             value: {{ .value | quote }}
@@ -119,6 +121,8 @@ spec:
           volumeMounts:
             - mountPath: /config
               name: {{ .Release.Name }}-mqtt-transport-config
+            - mountPath: /evp-config
+              name: {{ .Release.Name }}-mqtt-transport-featureflags
           {{- if eq .Values.mqtt.ssl.enabled true }}
             - mountPath: /mqtt-certs
               name: mqtt-certs
@@ -144,6 +148,12 @@ spec:
               path:  tb-mqtt-transport.conf
             - key: logback
               path:  logback.xml
+        - name: {{ .Release.Name }}-mqtt-transport-featureflags
+          configMap:
+            name: {{ .Release.Name }}-mqtt-transport-featureflags
+            items:
+            - key: evp-mqtt-config
+              path: evp-mqtt-config.yaml
         - name: {{ .Release.Name }}-node-logs
           emptyDir: {}
         {{- if eq .Values.mqtt.ssl.enabled true }}
