@@ -151,9 +151,6 @@ spec:
         - name: {{ .Release.Name }}-mqtt-transport-featureflags
           configMap:
             name: {{ .Release.Name }}-mqtt-transport-featureflags
-            items:
-            - key: evp-mqtt-config
-              path: evp-mqtt-config.yaml
         - name: {{ .Release.Name }}-node-logs
           emptyDir: {}
         {{- if eq .Values.mqtt.ssl.enabled true }}

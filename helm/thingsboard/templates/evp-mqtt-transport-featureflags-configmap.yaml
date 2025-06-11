@@ -22,7 +22,7 @@ metadata:
     name: '{{ .Release.Name }}-mqtt-transport-featureflags'
     {{- include "thingsboard.labels" . | nindent 4 }}
 data:
-  evp-mqtt-config: |-
+  evp-mqtt-config.yaml: |-
     evp:
       features:
         queue-routing-information:
