@@ -1,0 +1,38 @@
+{{- if .Values.evp.mqtt.enabled }}
+#
+# Copyright © 2016-2020 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-mqtt-transport-featureflags
+  labels:
+    name: '{{ .Release.Name }}-mqtt-transport-featureflags'
+    {{- include "thingsboard.labels" . | nindent 4 }}
+data:
+  evp-mqtt-config.yaml: |-
+    evp:
+      features:
+        queue-routing-information:
+          enabled: {{ .Values.evp.mqtt.queueRoutingInformation | default false }}
+        tls-device-certificate-validation:
+          enabled: {{ .Values.evp.mqtt.tlsDeviceCertificateValidation | default false }}
+        mqtt-connect-handling:
+          enabled: {{ .Values.evp.mqtt.mqttConnectHandling | default false }}
+        tenant-profile-request-handling:
+          enabled: {{ .Values.evp.mqtt.tenantProfileRequestHandling | default false }}
+        device-profile-request-handling:
+          enabled: {{ .Values.evp.mqtt.deviceProfileRequestHandling | default false }}
+{{- end }}
