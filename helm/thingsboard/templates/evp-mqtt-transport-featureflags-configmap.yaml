@@ -25,14 +25,7 @@ data:
   evp-mqtt-config.yaml: |-
     evp:
       features:
-        queue-routing-information:
-          enabled: {{ .Values.evp.mqtt.queueRoutingInformation | default false }}
-        tls-device-certificate-validation:
-          enabled: {{ .Values.evp.mqtt.tlsDeviceCertificateValidation | default false }}
-        mqtt-connect-handling:
-          enabled: {{ .Values.evp.mqtt.mqttConnectHandling | default false }}
-        tenant-profile-request-handling:
-          enabled: {{ .Values.evp.mqtt.tenantProfileRequestHandling | default false }}
-        device-profile-request-handling:
-          enabled: {{ .Values.evp.mqtt.deviceProfileRequestHandling | default false }}
+        {{- if .Values.evp.features }}
+          {{- toYaml .Values.evp.features | nindent 8 }}
+        {{- end}}
 {{- end }}
