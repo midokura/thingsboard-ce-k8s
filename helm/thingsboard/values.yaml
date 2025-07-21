@@ -397,9 +397,13 @@ redis:
       enabled: false
 
 kafka:
+  image:
+    tag: 3.1.0-debian-10-r31
   persistence:
     enabled: false
   zookeeper:
+    image:
+      tag: 3.7.0-debian-10-r303
     persistence:
       enabled: false
 
