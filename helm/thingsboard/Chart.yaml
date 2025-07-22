@@ -32,7 +32,7 @@ dependencies:
     repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
     condition: cassandra.enabled
   - name: kafka
-    version: 15.3.4
+    version: 19.1.5
     repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
   - name: redis
     version: 16.4.5
