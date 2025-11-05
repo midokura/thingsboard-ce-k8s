@@ -28,6 +28,8 @@ fullnameOverride: ""
 evp:
   mqtt:
     enabled: false
+  node:
+    enabled: false
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -59,6 +61,11 @@ node:
   kind: StatefulSet
   loadDemo: false
   replicaCount: 1
+  evp:
+    image:
+      server: setplease
+      repository: setplease
+      tag: setplease
   log:
     fileAppenderEnabled: false
     root:

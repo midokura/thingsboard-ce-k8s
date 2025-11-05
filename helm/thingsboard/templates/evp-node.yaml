@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-{{- if not .Values.evp.node.enabled }}
+{{- if .Values.evp.node.enabled }}
 apiVersion: apps/v1
 kind: {{ .Values.node.kind }}
 metadata:
@@ -70,7 +70,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.node.securityContext | nindent 12 }}
-          image: "{{ .Values.node.image.server | default .Values.global.image.server }}/{{ .Values.node.image.repository }}:{{ .Values.node.image.tag | default .Values.global.image.tag }}"
+          image: "{{ .Values.node.evp.image.server }}/{{ .Values.node.evp.image.repository }}:{{ .Values.node.evp.image.tag }}"
           imagePullPolicy: {{ .Values.node.image.pullPolicy | default .Values.global.image.pullPolicy}}
           ports:
           - containerPort: {{ .Values.node.port.http }}
