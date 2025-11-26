@@ -24,9 +24,13 @@ metadata:
     {{- include "thingsboard.labels" . | nindent 4 }}
 spec:
   {{- $podLabels := include "thingsboard.selectorLabels-node" . }}
+  {{- if .Values.evp.tb.up }}
 {{- if not .Values.node.autoscaling.enabled }}
   replicas: {{ .Values.node.replicaCount }}
 {{- end }}
+  {{- else }}
+  replicas: 0
+  {{- end }}
 {{- if eq .Values.node.kind "StatefulSet" }}
   serviceName: tb-node
   podManagementPolicy: "Parallel"
