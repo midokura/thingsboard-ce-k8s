@@ -22,8 +22,12 @@ metadata:
     {{- include "thingsboard.labels" . | nindent 4 }}
 spec:
 {{- $podLabels := include "thingsboard.selectorLabels-coap" . }}
+{{- if .Values.evp.tb.up }}
 {{- if not .Values.coap.autoscaling.enabled }}
   replicas: {{ .Values.coap.replicaCount }}
+{{- end }}
+{{- else }}
+  replicas: 0
 {{- end }}
 {{- if eq .Values.coap.kind "StatefulSet" }}
   podManagementPolicy: "Parallel"

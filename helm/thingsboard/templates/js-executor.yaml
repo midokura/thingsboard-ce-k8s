@@ -21,8 +21,12 @@ metadata:
   labels:
     {{- include "thingsboard.labels" . | nindent 4 }}
 spec:
+{{- if .Values.evp.tb.up }}
 {{- if not .Values.jsexecutor.autoscaling.enabled }}
   replicas: {{ .Values.jsexecutor.replicaCount }}
+{{- end }}
+{{- else }}
+  replicas: 0
 {{- end }}
 {{- if eq .Values.jsexecutor.kind "StatefulSet" }}
   serviceName: tb-js-executor

@@ -22,8 +22,12 @@ metadata:
     {{- include "thingsboard.labels" . | nindent 4 }}
 spec:
 {{- $podLabels := include "thingsboard.selectorLabels-http" . }}
+{{- if .Values.evp.tb.up }}
 {{- if not .Values.http.autoscaling.enabled }}
   replicas: {{ .Values.http.replicaCount }}
+{{- end }}
+{{- else }}
+  replicas: 0
 {{- end }}
 {{- if eq .Values.http.kind "StatefulSet" }}
   podManagementPolicy: "Parallel"
