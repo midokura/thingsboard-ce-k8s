@@ -1,3 +1,4 @@
+{{- if .Values.evp.tb.up }}
 {{- if or .Release.IsInstall .Values.initDBJob.fromVersion }}
 #
 # Copyright © 2016-2020 The Thingsboard Authors
@@ -87,4 +88,5 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}
 {{- end }}

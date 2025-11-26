@@ -21,11 +21,14 @@ global:
     pullSecrets: []
     pullPolicy: Always
   jsonLogs: false
+  
 
 nameOverride: ""
 fullnameOverride: ""
 
 evp:
+  tb:
+    up: true
   mqtt:
     enabled: false
   node:

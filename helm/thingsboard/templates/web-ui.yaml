@@ -23,8 +23,12 @@ metadata:
     tags.datadoghq.com/version: {{ .Values.global.image.tag }}
     {{- include "thingsboard.labels" . | nindent 4 }}
 spec:
+{{- if .Values.evp.tb.up }}
 {{- if not .Values.webui.autoscaling.enabled }}
   replicas: {{ .Values.webui.replicaCount }}
+{{- end }}
+{{- else }}
+  replicas: 0
 {{- end }}
 {{- if eq .Values.webui.kind "StatefulSet" }}
   podManagementPolicy: "Parallel"
