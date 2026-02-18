@@ -102,7 +102,7 @@ spec:
           - name: ZOOKEEPER_URL
             value: "{{ .Release.Name }}-zookeeper:{{ .Values.kafka.zookeeper.containerPorts.client }}"
           - name: TB_KAFKA_SERVERS
-            value: "{{ .Release.Name }}-kafka:{{ .Values.kafka.service.ports.client }}"
+            value: "{{ .Values.global.kafka.bootstrapServer | default (printf "%s-kafka" .Release.Name) }}:{{ .Values.global.kafka.port | default .Values.kafka.service.ports.client }}"
           - name: TB_QUEUE_KAFKA_REPLICATION_FACTOR
             value: "{{ .Values.kafka.offsetsTopicReplicationFactor }}"
           - name: JS_EVALUATOR
