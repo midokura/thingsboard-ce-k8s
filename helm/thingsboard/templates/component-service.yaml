@@ -17,7 +17,11 @@
 {{ $values := .Values -}}
 {{- $releaseName := .Release.Name -}}
 {{- $labels := include "thingsboard.labels" . -}}
-{{- range tuple "mqtt" "http" "coap" "webui" -}}
+{{- $components := list "http" "coap" "webui" -}}
+{{- if .Values.mqtt.service.enabled -}}
+  {{- $components = append $components "mqtt" -}}
+{{- end -}}
+{{- range $components -}}
   {{- $component := . -}}
   {{- $componentValues := index $values $component -}}
 
